@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "625211751439",
+    "project_id": "cartrack-6967e",
+    "storage_bucket": "cartrack-6967e.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:625211751439:android:52de055a8e1c6a8fdd777a",
+        "android_client_info": {
+          "package_name": "com.example.myapitest"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD11co33Gm9OUin1sOvVteKAXCFUIfEqdI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

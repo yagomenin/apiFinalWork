@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".LoginActivity">
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/itCellPhone"
+        android:layout_width="230dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:hint="@string/phoneNumber"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:startIconDrawable="@drawable/phone_icon">
+
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/cellphone"
+            android:paddingStart="50dp"
+            android:maxLength="14"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:ignore="RtlSymmetry" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/itVerifySms"
+        android:layout_width="230dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:visibility="gone"
+        android:hint="@string/sms_code"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/itCellPhone"
+        app:startIconDrawable="@drawable/smartphone">
+
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/verifySms"
+            android:paddingStart="50dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:ignore="RtlSymmetry" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        android:id="@+id/btSendSms"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:text="Enviar SMS"
+        android:textColor="@color/black"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toBottomOf="@+id/itCellPhone"
+        app:layout_constraintStart_toEndOf="@+id/itCellPhone"
+        app:layout_constraintTop_toTopOf="@+id/itCellPhone"
+        style="@style/Widget.MaterialComponents.Button.TextButton"/>
+
+    <Button
+        android:id="@+id/btVerifySms"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:text="Verificar SMS"
+        android:visibility="gone"
+        android:textColor="@color/black"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toBottomOf="@+id/itVerifySms"
+        app:layout_constraintStart_toEndOf="@+id/itVerifySms"
+        app:layout_constraintTop_toBottomOf="@+id/itVerifySms"
+        app:layout_constraintTop_toTopOf="@+id/itVerifySms" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
