@@ -17,17 +17,17 @@ import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
+import android.os.Environment
 import android.provider.MediaStore
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.FileProvider
 import com.example.myapitest.model.Car
 import com.example.myapitest.model.Place
 import com.example.myapitest.service.Result
 import com.example.myapitest.service.RetrofitClient
 import com.example.myapitest.service.safeApiCall
-import com.example.myapitest.ui.loadUrl
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.LatLng
@@ -40,6 +40,8 @@ import kotlinx.coroutines.withContext
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.security.SecureRandom
+import java.text.SimpleDateFormat
+import java.util.Date
 import java.util.UUID
 
 class AddCarActivity : AppCompatActivity(), OnMapReadyCallback {
@@ -63,6 +65,12 @@ class AddCarActivity : AppCompatActivity(), OnMapReadyCallback {
     ) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
             Toast.makeText(this@AddCarActivity, "Imagem Obtida", Toast.LENGTH_SHORT).show()
+            val data: Intent? = result.data
+            val imageBitmap: Bitmap? = data?.extras?.get("data") as Bitmap?
+
+            imageBitmap?.let {
+                binding.imgViewCar.setImageBitmap(it)
+            }
         }
     }
 
@@ -93,7 +101,6 @@ class AddCarActivity : AppCompatActivity(), OnMapReadyCallback {
         imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
         val data = baos.toByteArray()
 
-
         imagesRef.putBytes(data)
             .addOnFailureListener {
                 Toast.makeText(this, "Falha ao realizar o upload", Toast.LENGTH_SHORT).show()
@@ -101,6 +108,7 @@ class AddCarActivity : AppCompatActivity(), OnMapReadyCallback {
             .addOnSuccessListener {
                 imagesRef.downloadUrl.addOnSuccessListener { uri ->
                     photoUrl = uri.toString()
+                    Toast.makeText(this, "Upload feito com sucesso", Toast.LENGTH_SHORT).show()
                 }
             }
     }
@@ -136,8 +144,28 @@ class AddCarActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private fun openCamera() {
         val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        imageUri = createImageUri()
         intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri)
         cameraLauncher.launch(intent)
+    }
+
+    private fun createImageUri(): Uri {
+        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+        val imageFileName = "JPEG_${timeStamp}_"
+
+        val storageDir: File? = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+
+        imageFile = File.createTempFile(
+            imageFileName,
+            ".jpg",
+            storageDir
+        )
+
+        return FileProvider.getUriForFile(
+            this,
+            "com.example.minhaprimeiraapi.fileprovider",
+            imageFile!!
+        )
     }
 
     private fun requestCameraPermission() {
@@ -193,8 +221,8 @@ class AddCarActivity : AppCompatActivity(), OnMapReadyCallback {
                     id,
                     photoUrl,
                     binding.carYear.text.toString(),
-                    binding.carLicense.text.toString(),
                     binding.carName.text.toString(),
+                    binding.carLicense.text.toString(),
                     place
                 )
                 val result = safeApiCall {
