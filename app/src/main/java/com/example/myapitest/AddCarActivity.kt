@@ -64,13 +64,10 @@ class AddCarActivity : AppCompatActivity(), OnMapReadyCallback {
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
+            val data: File? = imageFile
+            displayImage(data)
             Toast.makeText(this@AddCarActivity, "Imagem Obtida", Toast.LENGTH_SHORT).show()
-            val data: Intent? = result.data
-            val imageBitmap: Bitmap? = data?.extras?.get("data") as Bitmap?
 
-            imageBitmap?.let {
-                binding.imgViewCar.setImageBitmap(it)
-            }
         }
     }
 
@@ -87,6 +84,13 @@ class AddCarActivity : AppCompatActivity(), OnMapReadyCallback {
         mMap.setOnMapClickListener { latLng ->
             addMarker(latLng)
             saveLocation(latLng)
+        }
+    }
+
+    private fun displayImage(data: File?) {
+        data?.let {
+            val bitmap = BitmapFactory.decodeFile(it.absolutePath)
+            binding.imgViewCar.setImageBitmap(bitmap)
         }
     }
 
@@ -138,8 +142,7 @@ class AddCarActivity : AppCompatActivity(), OnMapReadyCallback {
     private fun addMarker(location: LatLng) {
         mMap.clear()
         mMap.addMarker(MarkerOptions().position(location).title("Sua localização"))
-        lat = location.latitude.toFloat()
-        long = location.longitude.toFloat()
+
     }
 
     private fun openCamera() {
